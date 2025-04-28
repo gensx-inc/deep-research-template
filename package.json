@@ -1,0 +1,32 @@
+{
+  "name": "@examples/deep-research",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "nodemon",
+    "start": "tsx ./index.ts",
+    "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@gensx/openai": "workspace:*",
+    "@mendable/firecrawl-js": "^1.21.0",
+    "@types/node-fetch": "^2.6.12",
+    "@gensx/core": "workspace:*",
+    "node-fetch": "^3.3.2",
+    "openai": "catalog:",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:examples",
+    "@types/xml2js": "^0.4.14",
+    "nodemon": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}
