@@ -1,5 +1,7 @@
+import { openai } from "@ai-sdk/openai";
 import * as gensx from "@gensx/core";
-import { ChatCompletion } from "@gensx/openai";
+import { generateObject } from "@gensx/vercel-ai";
+import { z } from "zod";
 
 import { ArxivEntry } from "./arxiv.js";
 
@@ -12,9 +14,9 @@ export interface GradeDocumentOutput {
   useful: boolean;
 }
 
-export const GradeDocument = gensx.Component<GradeDocumentProps, boolean>(
+export const GradeDocument = gensx.Component(
   "GradeDocument",
-  ({ prompt, document }) => {
+  async ({ prompt, document }: GradeDocumentProps): Promise<boolean> => {
     const systemMessage = `You are a helpful research assistant.
 
 Instructions:
@@ -43,23 +45,20 @@ Here is the document:
 </summary>
 </document>`;
 
-    return (
-      <ChatCompletion
-        model="gpt-4o-mini"
-        messages={[
-          {
-            role: "system",
-            content: systemMessage,
-          },
-          { role: "user", content: userMessage },
-        ]}
-        response_format={{ type: "json_object" }}
-      >
-        {(response: string) => {
-          const output = JSON.parse(response) as GradeDocumentOutput;
-          return output.useful;
-        }}
-      </ChatCompletion>
-    );
+    const response = await generateObject({
+      model: openai("gpt-4o-mini"),
+      messages: [
+        {
+          role: "system",
+          content: systemMessage,
+        },
+        { role: "user", content: userMessage },
+      ],
+      schema: z.object({
+        useful: z.boolean(),
+      }),
+    });
+
+    return response.object.useful;
   },
 );

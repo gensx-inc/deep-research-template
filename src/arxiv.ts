@@ -23,9 +23,12 @@ export interface SearchArxivProps {
   maxResults?: number;
 }
 
-export const SearchArxiv = gensx.Component<SearchArxivProps, ArxivEntry[]>(
+export const SearchArxiv = gensx.Component(
   "SearchArxiv",
-  async ({ query, maxResults = 10 }) => {
+  async ({
+    query,
+    maxResults = 10,
+  }: SearchArxivProps): Promise<ArxivEntry[]> => {
     const queryUrl = `https://export.arxiv.org/api/query?search_query=all:${query}&start=0&max_results=${maxResults}`;
     const response = await fetch(queryUrl);
 
